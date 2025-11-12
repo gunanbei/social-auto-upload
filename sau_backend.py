@@ -344,19 +344,18 @@ def postVideo():
     # 打印获取到的数据（仅作为示例）
     print("File List:", file_list)
     print("Account List:", account_list)
-    match type:
-        case 1:
-            post_video_xhs(title, file_list, tags, account_list, category, enableTimer, videos_per_day, daily_times,
-                               start_days)
-        case 2:
-            post_video_tencent(title, file_list, tags, account_list, category, enableTimer, videos_per_day, daily_times,
-                               start_days)
-        case 3:
-            post_video_DouYin(title, file_list, tags, account_list, category, enableTimer, videos_per_day, daily_times,
-                      start_days, productLink, productTitle)
-        case 4:
-            post_video_ks(title, file_list, tags, account_list, category, enableTimer, videos_per_day, daily_times,
-                      start_days)
+    if type == 1:
+        post_video_xhs(title, file_list, tags, account_list, category, enableTimer, videos_per_day, daily_times,
+                           start_days)
+    elif type == 2:
+        post_video_tencent(title, file_list, tags, account_list, category, enableTimer, videos_per_day, daily_times,
+                           start_days)
+    elif type == 3:
+        post_video_DouYin(title, file_list, tags, account_list, category, enableTimer, videos_per_day, daily_times,
+                  start_days, productLink, productTitle)
+    elif type == 4:
+        post_video_ks(title, file_list, tags, account_list, category, enableTimer, videos_per_day, daily_times,
+                  start_days)
     # 返回响应给客户端
     return jsonify(
         {
@@ -429,18 +428,17 @@ def postVideoBatch():
         # 打印获取到的数据（仅作为示例）
         print("File List:", file_list)
         print("Account List:", account_list)
-        match type:
-            case 1:
-                return
-            case 2:
-                post_video_tencent(title, file_list, tags, account_list, category, enableTimer, videos_per_day, daily_times,
-                                   start_days)
-            case 3:
-                post_video_DouYin(title, file_list, tags, account_list, category, enableTimer, videos_per_day, daily_times,
-                          start_days, productLink, productTitle)
-            case 4:
-                post_video_ks(title, file_list, tags, account_list, category, enableTimer, videos_per_day, daily_times,
-                          start_days)
+        if type == 1:
+            return
+        elif type == 2:
+            post_video_tencent(title, file_list, tags, account_list, category, enableTimer, videos_per_day, daily_times,
+                               start_days)
+        elif type == 3:
+            post_video_DouYin(title, file_list, tags, account_list, category, enableTimer, videos_per_day, daily_times,
+                      start_days, productLink, productTitle)
+        elif type == 4:
+            post_video_ks(title, file_list, tags, account_list, category, enableTimer, videos_per_day, daily_times,
+                      start_days)
     # 返回响应给客户端
     return jsonify(
         {
@@ -451,27 +449,26 @@ def postVideoBatch():
 
 # 包装函数：在线程中运行异步函数
 def run_async_function(type,id,status_queue):
-    match type:
-        case '1':
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            loop.run_until_complete(xiaohongshu_cookie_gen(id, status_queue))
-            loop.close()
-        case '2':
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            loop.run_until_complete(get_tencent_cookie(id,status_queue))
-            loop.close()
-        case '3':
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            loop.run_until_complete(douyin_cookie_gen(id,status_queue))
-            loop.close()
-        case '4':
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            loop.run_until_complete(get_ks_cookie(id,status_queue))
-            loop.close()
+    if type == '1':
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(xiaohongshu_cookie_gen(id, status_queue))
+        loop.close()
+    elif type == '2':
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(get_tencent_cookie(id,status_queue))
+        loop.close()
+    elif type == '3':
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(douyin_cookie_gen(id,status_queue))
+        loop.close()
+    elif type == '4':
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(get_ks_cookie(id,status_queue))
+        loop.close()
 
 # SSE 流生成器函数
 def sse_stream(status_queue):

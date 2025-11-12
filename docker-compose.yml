@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  social-auto-upload-backend:
+    image: linghuajian1/social-auto-upload:latest
+    container_name: social-auto-upload-backend
+    ports:
+      - "5409:5409"
+    volumes:
+      # 持久化数据库目录（推荐：挂载整个目录而不是单个文件）
+      - ./db:/app/db
+      # 持久化 Cookie 文件（Web 界面生成的 cookies）
+      - ./cookiesFile:/app/cookiesFile
+      # 持久化 Cookie 文件（examples 脚本使用的 cookies）
+      - ./cookies:/app/cookies
+      # 持久化上传的视频文件
+      - ./videoFile:/app/videoFile
+      # 挂载配置文件（注意：必须确保 conf.py 是文件而不是目录）
+      - ./conf.py:/app/conf.py:ro
+    environment:
+      - PYTHONUNBUFFERED=1
+      - FLASK_ENV=production
+    restart: unless-stopped
+    networks:
+      - social-upload-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5409/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  social-upload-network:
+    driver: bridge
+
